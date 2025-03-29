@@ -1,17 +1,21 @@
 import express from "express";
 import httpServer from "http";
 import { Server } from "socket.io";
-import { cors } from "./src/middlewares/cors";
 import { StreamingSocket } from "./src/sockets/Streaming";
 import { MediaSoup } from "./src/MediaSoup";
+import corsMiddleware from "./src/middlewares/cors";
 
 const app = express();
 const port = 8888;
+app.use(express.json());
+app.use(corsMiddleware);
 
 const server = httpServer.createServer(app);
-const io = new Server(server);
-
-app.use(cors);
+const io = new Server(server, {
+    cors: {
+        origin: "*", // Allow all origins or specify your frontend URL
+    },
+});
 
 new StreamingSocket(io).initialize();
 MediaSoup.getWorker();
@@ -21,5 +25,5 @@ app.get("/", (req, res) => {
 });
 
 server.listen(port, () => {
-    console.log("Server is up and running!");
+    console.log("Server is up and running! on port");
 });

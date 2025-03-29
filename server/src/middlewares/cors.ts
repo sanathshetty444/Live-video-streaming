@@ -1,8 +1,17 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
-export const cors = (req: Request, res: Response, next: NextFunction) => {
+const corsMiddleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
+    console.log("inside cors");
+
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, DELETE, OPTIONS"
+    );
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Content-Type, Authorization"
@@ -16,3 +25,5 @@ export const cors = (req: Request, res: Response, next: NextFunction) => {
 
     next();
 };
+
+export default corsMiddleware;
