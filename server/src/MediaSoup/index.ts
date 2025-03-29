@@ -5,7 +5,8 @@ import { Worker } from "mediasoup/node/lib/types";
 export class MediaSoup {
     static worker: Worker;
 
-    static routers: Map<String, Router>;
+    static routers: Map<String, Router> = new Map();
+
     static async getWorker() {
         if (!this.worker)
             this.worker = await mediasoup.createWorker({

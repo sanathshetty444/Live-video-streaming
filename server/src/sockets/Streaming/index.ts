@@ -45,44 +45,46 @@ export class StreamingSocket extends SocketHandler {
                     );
                 });
 
-                socket.on(EVENT_NAMES.CREATE_TRANSPORT, async (data) => {
-                    const { sender, callback } = data;
-                    const userId = socket.id;
-                    const connection = this.connectionMap.get(userId)!;
-                    if (connection?.router) {
-                        if (sender) {
-                            const transport =
-                                await this.mediaSoupClient.createTransport(
-                                    connection?.router
-                                );
+                socket.on(
+                    EVENT_NAMES.CREATE_TRANSPORT,
+                    async ({ sender }, callback) => {
+                        const userId = socket.id;
+                        const connection = this.connectionMap.get(userId)!;
+                        if (connection?.router) {
+                            if (sender) {
+                                const transport =
+                                    await this.mediaSoupClient.createTransport(
+                                        connection?.router
+                                    );
 
-                            connection.producerTransport = transport;
+                                connection.producerTransport = transport;
 
-                            callback({
-                                id: transport.id,
-                                iceParameters: transport.iceParameters,
-                                iceCandidates: transport.iceCandidates,
-                                dtlsParameters: transport.dtlsParameters,
-                            });
+                                callback({
+                                    id: transport.id,
+                                    iceParameters: transport.iceParameters,
+                                    iceCandidates: transport.iceCandidates,
+                                    dtlsParameters: transport.dtlsParameters,
+                                });
+                            } else {
+                                const consumer =
+                                    await this.mediaSoupClient.createTransport(
+                                        connection?.router
+                                    );
+
+                                connection.consumerTransport = consumer;
+
+                                callback({
+                                    id: consumer.id,
+                                    iceParameters: consumer.iceParameters,
+                                    iceCandidates: consumer.iceCandidates,
+                                    dtlsParameters: consumer.dtlsParameters,
+                                });
+                            }
                         } else {
-                            const consumer =
-                                await this.mediaSoupClient.createTransport(
-                                    connection?.router
-                                );
-
-                            connection.consumerTransport = consumer;
-
-                            callback({
-                                id: consumer.id,
-                                iceParameters: consumer.iceParameters,
-                                iceCandidates: consumer.iceCandidates,
-                                dtlsParameters: consumer.dtlsParameters,
-                            });
+                            console.log("Connection not created yet");
                         }
-                    } else {
-                        console.log("Connection not created yet");
                     }
-                });
+                );
 
                 socket.on(
                     EVENT_NAMES.CONNECT_PRODUCER_TRANSPORT,
