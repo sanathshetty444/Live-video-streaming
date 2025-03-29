@@ -47,6 +47,20 @@ export class MediaSoup {
             preferUdp: true,
         });
 
+        transport.on("dtlsstatechange", (dtlsState) => {
+            if (dtlsState === "closed") {
+                transport.close();
+            }
+        });
+
+        /**
+         * Monitors transport closure events.
+         * Useful for logging or cleaning up resources related to the transport.
+         */
+        transport.on("@close", () => {
+            console.log("Transport closed");
+        });
+
         return transport;
     }
 }
