@@ -1,5 +1,5 @@
 export class EventEmitter {
-    static events: Record<string, Function[]>;
+    static events: Record<string, Function[]> = {};
 
     static emit(eventName: string, data: any) {
         if (!this.events[eventName]) return;
@@ -9,7 +9,6 @@ export class EventEmitter {
 
     static listen(eventName: string, callback: Function) {
         if (!this.events[eventName]) this.events[eventName] = [];
-
         this.events[eventName].push(callback);
     }
 }

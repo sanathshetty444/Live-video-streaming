@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useApp } from "./useApp";
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const {
+        localStreamRef,
+        remoteStreamRef,
+        connectSendTransport,
+        connectRecvTransport,
+        createDevice,
+        createRecvTransport,
+        createSendTransport,
+    } = useApp();
+    return (
+        <>
+            <video ref={localStreamRef} id="localvideo" autoPlay playsInline />
+            <video
+                ref={remoteStreamRef}
+                id="remotevideo"
+                autoPlay
+                playsInline
+            />
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                }}
+            >
+                {/* <button onClick={getRouterRtpCapabilities}>
+                    Get Router RTP Capabilities
+                </button> */}
+                <button onClick={createDevice}>Create Device</button>
+                <button onClick={createSendTransport}>
+                    Create send transport
+                </button>
+                <button onClick={connectSendTransport}>
+                    Connect send transport and produce
+                </button>
+                <button onClick={createRecvTransport}>
+                    Create recv transport
+                </button>
+                <button onClick={connectRecvTransport}>
+                    Connect recv transport and consume
+                </button>
+            </div>
+        </>
+    );
 }
 
-export default App
+export default App;

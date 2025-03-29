@@ -7,7 +7,9 @@ export class SocketHandler {
 
     static getSocket() {
         if (!this.socket) {
-            this.socket = io("http://localhost:8888/streaming");
+            this.socket = io("http://localhost:8888/streaming", {
+                transports: ["websocket"],
+            });
         }
 
         this.socket.on("connect", () => {
@@ -28,10 +30,10 @@ export class SocketHandler {
             EventEmitter.emit(EVENT_NAMES.ROUTER_CAPABILITIES, data);
         });
 
+        console.log(this.socket);
+
         return this.socket;
     }
-
-    static initialize() {}
 
     connectToRoom({ roomId }: { roomId: string }) {
         const socket = SocketHandler.getSocket();
@@ -40,5 +42,10 @@ export class SocketHandler {
 
     subscribeToAnEvent(name: keyof typeof EVENT_NAMES, callback: Function) {
         EventEmitter.listen(name, callback);
+    }
+
+    emitAnEvent(name: keyof typeof EVENT_NAMES, data: any) {
+        const socket = SocketHandler.getSocket();
+        socket?.emit(name, data);
     }
 }
