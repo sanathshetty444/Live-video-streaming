@@ -14,23 +14,27 @@ export class SocketHandler {
 
         this.socket.on("connect", () => {
             console.log("Connected to server successfully");
+            this.socket.on(EVENT_NAMES.JOIN_ROOM, (data) => {
+                EventEmitter.emit(EVENT_NAMES.JOIN_ROOM, data);
+            });
+            this.socket.on(EVENT_NAMES.TRANSPORT_CREATED, (data) => {
+                EventEmitter.emit(EVENT_NAMES.TRANSPORT_CREATED, data);
+            });
+            this.socket.on(EVENT_NAMES.ROUTER_CAPABILITIES, (data) => {
+                EventEmitter.emit(EVENT_NAMES.ROUTER_CAPABILITIES, data);
+            });
+            this.socket.on(EVENT_NAMES.CONSUMER_TRANSPORT_CREATED, (data) => {
+                EventEmitter.emit(EVENT_NAMES.CONSUMER_TRANSPORT_CREATED, data);
+            });
+            this.socket.on(EVENT_NAMES.EXISTING_USERS_LIST, (data) => {
+                EventEmitter.emit(EVENT_NAMES.EXISTING_USERS_LIST, data);
+            });
+            console.log(this.socket);
         });
 
         this.socket.on("connect_error", (error) => {
             console.log("Error in connection", error);
         });
-
-        this.socket.on(EVENT_NAMES.JOIN_ROOM, (data) => {
-            EventEmitter.emit(EVENT_NAMES.JOIN_ROOM, data);
-        });
-        this.socket.on(EVENT_NAMES.TRANSPORT_CREATED, (data) => {
-            EventEmitter.emit(EVENT_NAMES.TRANSPORT_CREATED, data);
-        });
-        this.socket.on(EVENT_NAMES.ROUTER_CAPABILITIES, (data) => {
-            EventEmitter.emit(EVENT_NAMES.ROUTER_CAPABILITIES, data);
-        });
-
-        console.log(this.socket);
 
         return this.socket;
     }
