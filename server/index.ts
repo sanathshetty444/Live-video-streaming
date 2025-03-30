@@ -1,7 +1,7 @@
 import express from "express";
 import httpServer from "http";
 import { Server } from "socket.io";
-import { StreamingSocket } from "./src/sockets/Streaming";
+import { StreamingSocket } from "./src/sockets/Streaming/oneToMany";
 import { MediaSoup } from "./src/MediaSoup";
 import corsMiddleware from "./src/middlewares/cors";
 
