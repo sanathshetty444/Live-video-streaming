@@ -41,6 +41,8 @@ export const useAppOneToMany = () => {
     const [consumerList, setConsumerList] = useState<Record<string, Consumer>>(
         {}
     );
+    const [isProducerTransportConnected, setIsProducerTransportConnected] =
+        useState(false);
 
     useEffect(() => {
         const socket = SocketHandler.getSocket();
@@ -82,8 +84,14 @@ export const useAppOneToMany = () => {
 
     useEffect(() => {
         console.log("producerTransport===", producerTransport);
-        //@ts-ignore
-        if (device && producerTransport && params?.track) {
+        if (
+            device &&
+            producerTransport &&
+            //@ts-ignore
+            params?.track &&
+            !isProducerTransportConnected
+        ) {
+            setIsProducerTransportConnected(true);
             connectSendTransport();
         }
     }, [device, producerTransport, params]);
@@ -200,13 +208,13 @@ export const useAppOneToMany = () => {
                 let transport = device?.createRecvTransport(params);
                 setConsumerTransport(transport!);
                 EventEmitter.listen(
-                    EVENT_NAMES.CONSUMER_TRANSPORT_CREATED,
-                    ({ newUserId }: any) => {
+                    EVENT_NAMES.NEW_PRODUCER_TRANSPORT_CONNECTED,
+                    ({ newUserId }: { newUserId: string }) => {
                         console.log(
                             "connecting to new user joined===",
                             newUserId
                         );
-                        connectRecvTransport(newUserId);
+                        connectRecvTransport({ newUserId, ct: transport! });
                     }
                 );
 

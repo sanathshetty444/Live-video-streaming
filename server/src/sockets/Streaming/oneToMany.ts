@@ -39,6 +39,7 @@ export class StreamingSocket extends SocketHandler {
                         router: router!,
                         roomId,
                     });
+                    socket.join(roomId);
                     socket
                         .to(roomId)
                         .emit("joinRoom", { ...data, userId: socket.id });
@@ -112,12 +113,21 @@ export class StreamingSocket extends SocketHandler {
                             dtlsParameters,
                         });
 
+                        console.log(
+                            "EVENT_NAMES.NEW_PRODUCER_TRANSPORT_CONNECTED===",
+                            socket.id,
+                            connection?.roomId
+                        );
+
                         //for existing users to connect to the new one
                         socket
                             .to(connection?.roomId!)
-                            .emit(EVENT_NAMES.CONSUMER_TRANSPORT_CREATED, {
-                                newUserId: socket.id,
-                            });
+                            .emit(
+                                EVENT_NAMES.NEW_PRODUCER_TRANSPORT_CONNECTED,
+                                {
+                                    newUserId: socket.id,
+                                }
+                            );
 
                         //for the new user to connect to the new one
                     }
@@ -168,8 +178,8 @@ export class StreamingSocket extends SocketHandler {
                         const connection = this.connectionMap.get(fromUserId)!;
                         const toUser = this.connectionMap.get(socket.id)!;
 
-                        const { consumerTransport, producer, router } =
-                            connection;
+                        const { producer, router } = connection;
+                        const { consumerTransport } = toUser;
 
                         if (producer) {
                             if (

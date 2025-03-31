@@ -23,9 +23,15 @@ export class SocketHandler {
             this.socket.on(EVENT_NAMES.ROUTER_CAPABILITIES, (data) => {
                 EventEmitter.emit(EVENT_NAMES.ROUTER_CAPABILITIES, data);
             });
-            this.socket.on(EVENT_NAMES.CONSUMER_TRANSPORT_CREATED, (data) => {
-                EventEmitter.emit(EVENT_NAMES.CONSUMER_TRANSPORT_CREATED, data);
-            });
+            this.socket.on(
+                EVENT_NAMES.NEW_PRODUCER_TRANSPORT_CONNECTED,
+                (data) => {
+                    EventEmitter.emit(
+                        EVENT_NAMES.NEW_PRODUCER_TRANSPORT_CONNECTED,
+                        data
+                    );
+                }
+            );
             this.socket.on(EVENT_NAMES.EXISTING_USERS_LIST, (data) => {
                 EventEmitter.emit(EVENT_NAMES.EXISTING_USERS_LIST, data);
             });
