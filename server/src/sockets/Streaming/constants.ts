@@ -8,6 +8,6 @@ export const EVENT_NAMES = {
     TRANSPORT_PRODUCE: "transportProduce",
     CONSUME_MEDIA: "consumeMedia",
     CONSUME_RESUME: "consumeResume",
-    CONSUMER_TRANSPORT_CREATED: "consumerTransportCreated",
     EXISTING_USERS_LIST: "existingUsersList",
+    NEW_PRODUCER_TRANSPORT_CONNECTED: "newProducerTransportConnected",
 };
