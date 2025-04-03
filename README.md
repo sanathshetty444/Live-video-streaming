@@ -1,4 +1,5 @@
 # Live Video Streaming with MediaSoup SFU
+Link to medium: https://medium.com/@sanathshetty444/understanding-webrtc-and-mediasoup-building-scalable-video-streaming-applications-dc2b9282ce47
 
 A real-time video streaming application built using MediaSoup (Selective Forwarding Unit), WebSocket, Express, and React. This project demonstrates a scalable video conferencing solution that efficiently handles multiple participants. The SFU architecture ensures optimal bandwidth usage by selectively forwarding media streams to participants, making it ideal for multi-participant video conferences.
 
